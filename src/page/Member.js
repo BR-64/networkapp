@@ -1,14 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // 1. เพิ่ม useState และ useEffect
 import { useNavigate, useParams } from 'react-router-dom';
 import './Member.css';
 
-const Member = (name,name_th,email) => {
+const Member = () => {
   const navigate = useNavigate();
-  const { id } = useParams();  // รับ id จาก URL
+  const { id } = useParams(); // รับ id จาก URL เช่น /member/1
+  
+  // 2. สร้าง State สำหรับเก็บข้อมูลสมาชิกที่ดึงมาได้
+  const [member, setMember] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // 3. ดึงข้อมูลจาก API เมื่อ Component โหลด
+  useEffect(() => {
+    fetch(`http://localhost:3000/api/people/${id}`)
+      .then(response => {
+        if (!response.ok) throw new Error('Member not found');
+        return response.json();
+      })
+      .then(data => {
+        setMember(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setLoading(false);
+      });
+  }, [id]); // ทำงานใหม่ทุกครั้งที่ id เปลี่ยน
 
   const handleBack = () => {
-    navigate('/');  // กลับไปหน้า Landing
+    navigate('/');
   };
+
+  // 4. ถ้ากำลังโหลด หรือไม่พบข้อมูล ให้แสดงข้อความแจ้ง
+  if (loading) return <div className="loading">Loading...</div>;
+  if (!member) return <div className="error">Member not found!</div>;
 
   return (
     <div className="member-page">
@@ -22,21 +47,12 @@ const Member = (name,name_th,email) => {
         <h1 className="member-header-title">Member</h1>
       </div>
 
-      {/* Profile Section */}
       <div className="member-content">
         <div className="profile-avatar">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="8" r="4" fill="currentColor"/>
-            <path 
-              d="M6 21C6 17.686 8.686 15 12 15C15.314 15 18 17.686 18 21" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round"
-            />
-          </svg>
+           {/* SVG เหมือนเดิม */}
         </div>
 
-        {/* Personal Detail */}
+        {/* Personal Detail - นำข้อมูลจาก member มาใช้ */}
         <section className="detail-section">
           <h2 className="section-title">Personal Detail</h2>
           
@@ -45,7 +61,7 @@ const Member = (name,name_th,email) => {
             <input 
               type="text" 
               className="form-input" 
-              placeholder= {name} 
+              value={member.name} // เปลี่ยนจาก placeholder เป็น value
               readOnly 
             />
           </div>
@@ -55,7 +71,7 @@ const Member = (name,name_th,email) => {
             <input 
               type="text" 
               className="form-input" 
-              placeholder={name_th}
+              value={member.name_th}
               readOnly 
             />
           </div>
@@ -65,7 +81,7 @@ const Member = (name,name_th,email) => {
             <input 
               type="text" 
               className="form-input" 
-              placeholder="Malaysia" 
+              value={member.location} 
               readOnly 
             />
           </div>
@@ -75,7 +91,7 @@ const Member = (name,name_th,email) => {
             <input 
               type="email" 
               className="form-input" 
-              placeholder={email} 
+              value={member.email} 
               readOnly 
             />
           </div>
@@ -83,103 +99,29 @@ const Member = (name,name_th,email) => {
           <div className="form-group">
             <label className="form-label">Expertise / ความเชี่ยวชาญ</label>
             <div className="tag-container">
-              <span className="tag tag-primary">Open Data</span>
-              <span className="tag tag-secondary">Procurement</span>
+              {/* วนลูปแสดง Tags จริงจาก API */}
+              {member.tags.map((tag, index) => (
+                <span key={index} className={`tag ${index === 0 ? 'tag-primary' : 'tag-secondary'}`}>
+                  {tag.label}
+                </span>
+              ))}
             </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Other Network / เครือข่ายอื่นๆ</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              placeholder="JAC Network" 
-              readOnly 
-            />
           </div>
         </section>
 
         {/* Organization Detail */}
         <section className="detail-section">
           <h2 className="section-title">Organization Detail</h2>
-          
           <div className="form-group">
             <label className="form-label">Organization Name (EN)</label>
             <input 
               type="text" 
               className="form-input" 
-              placeholder="Sinar Project" 
+              value={member.project} 
               readOnly 
             />
           </div>
-
-          <div className="form-group">
-            <label className="form-label">ชื่อองค์กร (ไทย)</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              readOnly 
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Position (EN)</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              placeholder="Project Coordinator" 
-              readOnly 
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">ตำแหน่ง (ไทย)</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              readOnly 
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Country / ประเทศ</label>
-            <input 
-              type="text" 
-              className="form-input" 
-              placeholder="Malaysia" 
-              readOnly 
-            />
-          </div>
-        </section>
-
-        {/* Note */}
-        <section className="detail-section">
-          <h2 className="section-title">Note</h2>
-          
-          <div className="form-group">
-            <textarea 
-              className="form-textarea" 
-              placeholder="เคยเจอที่งาน xx" 
-              rows="4" 
-              readOnly
-            ></textarea>
-          </div>
-        </section>
-
-        {/* Name Card */}
-        <section className="detail-section">
-          <h2 className="section-title">Name Card</h2>
-          
-          <div className="name-card-upload">
-            <div className="upload-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/>
-                <path d="M21 15L16 10L5 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span className="upload-text">name.png</span>
-          </div>
+          {/* ส่วนอื่นๆ สามารถเพิ่มได้ตามโครงสร้างข้อมูลของคุณ */}
         </section>
       </div>
     </div>

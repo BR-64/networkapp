@@ -1,5 +1,6 @@
 import React from 'react';
 import './Card.css';
+import{link} from 'react-router-dom';
 
 const Card = ({ 
   name = "XXXXXXXXXXXXXXXXXXX",        // ✅ เปลี่ยนจาก title เป็น name

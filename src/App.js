@@ -13,6 +13,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/member" element={<Member />} />
         <Route path="/1" element={<Card />} />
+        <Route path="/member/:id" element={<Member />} />
       </Routes>
   );
 }
