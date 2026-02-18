@@ -1,81 +1,29 @@
 import Card from '../component/Card';
 import './Landing.css';
-import React from "react";
+import React, { useState, useEffect } from "react"; 
 
 function Landing() {
-  // ใส่ข้อมูลตรงนี้
-  const contacts = [
-    {
-      id: 1,
-      name: 'Khairil Yusof',
-      name_th: 'ไคลิว ยูซอฟ',
-      project: 'Sinar Project',
-      location: 'Malaysia',
-      tags: [
-        { label: 'Open Data'},
-        { label: 'Procurement'},
-        { label: 'PEPS'}
+  const [contacts, setContacts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      ],
-      email: 'Khairil@gmail.com'
-    },
-    {
-      id: 2,
-      name: 'JAME CORSTIS',
-      name_th: 'เจม คอร์ทิส',
-      project: 'Cortis',
-      location: 'Taiwan',
-      tags: [
-        { label: 'Open Data', type: 'primary' },
-        { label: 'Procurement', type: 'secondary' }
-      ],
-      email: 'Khairil@gmail.com'
-    },
-    {
-      id: 3,
-      name: 'Sarah Johnson',
-      name_th: 'ซาร่า จอห์นสัน',
-      project: 'Tech Innovation',
-      location: 'Singapore',
-      tags: [
-        { label: 'Open Data', type: 'primary' },
-        { label: 'Procurement', type: 'secondary' }
-      ],
-      email: 'sarah@gmail.com'
-    },
-        {
-      id: 4,
-      name: 'Michael Chen',
-      name_th: 'ไมเคิล เฉิน',
-      project: 'Digital Transformation',
-      location: 'Thailand',
-      tags: [
-        { label: 'Open Data', type: 'primary' },
-        { label: 'Procurement', type: 'secondary' }
-      ],
-      email: 'michael@gmail.com'
-    },
-
-      {
-      id: 5,
-      name: 'Sarah Johnson',
-      name_th: 'ซาร่า จอห์นสัน',
-      project: 'Tech Innovation',
-      location: 'Singapore',
-      tags: [
-        { label: 'Open Data', type: 'primary' },
-        { label: 'Procurement', type: 'secondary' }
-      ],
-      email: 'sarah@gmail.com'
-    }
-  ];
+  useEffect(() => {
+    fetch('http://localhost:3000/api/people')
+      .then(response => response.json())
+      .then(data => {
+        setContacts(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []); 
 
   return (
     <div className="landing-container">
-      
       {/* Top bar */}
       <div className="top-bar">
-        <button className="add-member">+ Add Newmember</button>
+        <button className="add-member">+ Add New member</button>
         <span className="profile-icon">👤</span>
       </div>
 
@@ -88,10 +36,14 @@ function Landing() {
           <input placeholder="Searching" />
         </div>
 
-        <p className="people-count">{contacts.length} people</p>
+        {/* 4. Show loading state or count */}
+        {loading ? (
+          <p>Loading contacts...</p>
+        ) : (
+          <p className="people-count">{contacts.length} people</p>
+        )}
 
         <div className="card-list">
-          {/* วนลูปแสดง Card ตามข้อมูลใน contacts */}
           {contacts.map(contact => (
             <Card
               key={contact.id}
