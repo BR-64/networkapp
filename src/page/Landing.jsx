@@ -15,7 +15,7 @@ function Landing() {
 
   useEffect(() => {
     // fetch('http://localhost:3000/api/people')
-    fetch(`${process.env.REACT_APP_API_URL}/api/people`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/people`)
       .then((response) => response.json())
       .then((data) => {
         setContacts(
