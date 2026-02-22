@@ -1,11 +1,17 @@
 import Card from '../component/Card';
 import './Landing.css';
-import React, { useState, useEffect } from "react"; 
-import { Link } from 'react-router-dom'; // 1. Import Link
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from 'react-router-dom';
 
 function Landing() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/Login");
+  };
 
   useEffect(() => {
     fetch('http://localhost:3000/api/people')
@@ -24,7 +30,10 @@ function Landing() {
     <div className="landing-container">
       <div className="top-bar">
         <button className="add-member">+ Add New member</button>
-        <span className="profile-icon">👤</span>
+        <div className="top-bar-right">
+          <span className="profile-icon">👤</span>
+          <button className="logout-btn" onClick={handleLogout}>Logout</button>
+        </div>
       </div>
 
       <div className="content">
@@ -44,9 +53,9 @@ function Landing() {
         <div className="card-list">
           {contacts.map(contact => (
             /* 2. Wrap Card with Link using the dynamic ID */
-            <Link 
-              to={`/member/${contact.id}`} 
-              key={contact.id} 
+            <Link
+              to={`/member/${contact._id}`}
+              key={contact._id}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <Card
