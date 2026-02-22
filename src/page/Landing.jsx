@@ -11,7 +11,7 @@ function Landing() {
     fetch('http://localhost:3000/api/people')
       .then(response => response.json())
       .then(data => {
-        setContacts(data);
+        setContacts(Array.isArray(data) ? data : data.data ?? data.people ?? []);
         setLoading(false);
       })
       .catch(error => {
