@@ -32,9 +32,9 @@ function Landing() {
   return (
     <div className='landing-container'>
       <div className='top-bar'>
-        <button className='add-member'>+ Add New member</button>
+        <button className='add-member' onClick={() => navigate('/addmember')}>+ Add New member</button>
         <div className='top-bar-right'>
-          <span className='profile-icon'>👤</span>
+          <span className='profile-icon' onClick={() => navigate('/admin')} style={{ cursor: 'pointer' }}>👤</span>
           <button className='logout-btn' onClick={handleLogout}>
             Logout
           </button>

@@ -4,6 +4,10 @@ import Login from "./page/Login";
 import Landing from "./page/Landing";
 import Member from "./page/Member";
 import Card from "./component/Card";
+import Addmember from "./page/Addmember";
+import Admin from "./page/Admin/Admin";
+import Requirement from "./page/Admin/Requirement";
+import Approve from "./page/Admin/Approve";
 import './App.css';
 
 function PrivateRoute() {
@@ -21,6 +25,10 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/member" element={<Member />} />
           <Route path="/member/:id" element={<Member />} />
+          <Route path="/addmember" element={<Addmember />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/requirements" element={<Requirement />} />
+          <Route path="/approve/:id" element={<Approve />} />
         </Route>
       </Routes>
   );
