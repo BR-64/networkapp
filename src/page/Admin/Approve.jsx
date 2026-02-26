@@ -237,7 +237,7 @@ const Approve = () => {
           />
         </label>
         <p className="approve-submit-info">
-          Submit by {member?.name || '-'}&nbsp;-&nbsp;{formatDate(member?.created_at)}
+          Submit by {member?.submittedBy || member?.name || '-'}&nbsp;-&nbsp;{formatDate(member?.created_at)}
         </p>
 
         {/* Personal Detail */}

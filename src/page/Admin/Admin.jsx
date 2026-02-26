@@ -10,8 +10,19 @@ const Admin = () => {
     navigate('/');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/Login');
+  };
+
   return (
     <div className="admin-page">
+      <div className="admin-top-bar">
+        <div className="admin-top-bar-right">
+          <button className="admin-logout-btn" onClick={handleLogout}>Logout</button>
+        </div>
+      </div>
+
       <div className="admin-header">
         <button className="back-button" onClick={handleBack}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">

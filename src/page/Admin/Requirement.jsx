@@ -59,9 +59,9 @@ const Requirement = () => {
           <p className="requirement-empty">ยังไม่มีข้อมูลสมาชิก</p>
         ) : (
           members.map((member) => (
-            <div key={member.id} className="req-card">
+            <div key={member._id} className="req-card">
               <div className="req-card-header">
-                <span>Submit by {member.name}</span>
+                <span>Submit by {member.submittedBy || member.name || '-'}</span>
                 {member.created_at && (
                   <span className="req-card-date">{formatDate(member.created_at)}</span>
                 )}
@@ -74,7 +74,7 @@ const Requirement = () => {
               <div className="req-card-footer">
                 <button
                   className="req-edit-button"
-                  onClick={() => handleEdit(member.id)}
+                  onClick={() => handleEdit(member._id)}
                 >
                   Edit
                 </button>
