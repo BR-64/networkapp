@@ -72,7 +72,10 @@ const Approve = () => {
   const [nameCardName, setNameCardName] = useState('');
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions/${id}`)
+    const token = localStorage.getItem('token');
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => {
         console.log('[Approve] HTTP status:', res.status);
         return res.json();
@@ -140,9 +143,13 @@ const Approve = () => {
     };
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions/${id}/approve`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
 
@@ -166,8 +173,10 @@ const Approve = () => {
     setDeleting(true);
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions/${id}/reject`, {
         method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!response.ok) throw new Error(`เกิดข้อผิดพลาด (${response.status})`);

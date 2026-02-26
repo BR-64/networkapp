@@ -33,6 +33,8 @@ function Login() {
       }
 
       localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role || 'user');
+      localStorage.setItem('name', data.name || '');
       navigate('/');
     } catch {
       setError('Cannot connect to server.');

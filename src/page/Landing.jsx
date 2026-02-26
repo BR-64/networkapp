@@ -1,17 +1,11 @@
 import Card from '../component/Card';
 import './Landing.css';
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Landing() {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/Login');
-  };
 
   useEffect(() => {
     // fetch('http://localhost:3000/api/people')
@@ -31,16 +25,6 @@ function Landing() {
 
   return (
     <div className='landing-container'>
-      <div className='top-bar'>
-        <button className='add-member' onClick={() => navigate('/addmember')}>+ Add New member</button>
-        <div className='top-bar-right'>
-          <span className='profile-icon' onClick={() => navigate('/admin')} style={{ cursor: 'pointer' }}>👤</span>
-          <button className='logout-btn' onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      </div>
-
       <div className='content'>
         <h1>Network</h1>
         <h2>Contact list</h2>

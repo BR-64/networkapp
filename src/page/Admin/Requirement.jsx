@@ -18,10 +18,13 @@ const Requirement = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions`)
+    const token = localStorage.getItem('token');
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/submissions`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => {
-        setMembers(data);
+        setMembers(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch((err) => {
