@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Addmember.css';
+import ConfirmModal from '../component/ConfirmModal';
 
 const EXPERTISE_OPTIONS = [
   'Open Data',
@@ -54,6 +55,7 @@ const Addmember = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const handleBack = () => {
     navigate('/');
@@ -64,7 +66,7 @@ const Addmember = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setError(null);
 
@@ -77,6 +79,11 @@ const Addmember = () => {
       return;
     }
 
+    setShowConfirm(true);
+  };
+
+  const doSubmit = async () => {
+    setShowConfirm(false);
     setSubmitting(true);
 
     const tagLabel = formData.tags === 'Other' ? formData.tagsOther : formData.tags;
@@ -153,6 +160,15 @@ const Addmember = () => {
 
   return (
     <div className="addmember-page">
+      {showConfirm && (
+        <ConfirmModal
+          title='Submit member?'
+          message='Are you sure you want to submit this member for review?'
+          confirmLabel='Submit'
+          onConfirm={doSubmit}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
       {/* Header */}
       <div className="addmember-header">
         <button className="back-button" onClick={handleBack} type="button">
